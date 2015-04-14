@@ -1,0 +1,3 @@
+str = fopen('hw5db1.txt');
+c = textscan(str,'%s %s %s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f');
+fclose(str);
