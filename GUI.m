@@ -22,7 +22,7 @@ function varargout = GUI(varargin)
 
 % Edit the above text to modify the response to help GUI
 
-% Last Modified by GUIDE v2.5 22-Apr-2015 12:17:11
+% Last Modified by GUIDE v2.5 22-Apr-2015 17:01:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -242,10 +242,10 @@ for i = 1:42000
 end
 
 global N1 N2 N3 N4
-N1 = [Result1a(1,1) Result1a(1,2) Result1b(1,1) Result1b(1,2)]
-N2 = [Result2a(1,1) Result2a(1,2) Result2b(1,1) Result2b(1,2)]
-N3 = [Result3a(1,1) Result3a(1,2) Result3b(1,1) Result3b(1,2)]
-N4 = [Result4a(1,1) Result4a(1,2) Result4b(1,1) Result4b(1,2)]
+N1 = [Result1a(1,1) Result1b(1,1) Result1a(1,2) Result1b(1,2)];
+N2 = [Result2a(1,1) Result2b(1,1) Result2a(1,2) Result2b(1,2)];
+N3 = [Result3a(1,1) Result3b(1,1) Result3a(1,2) Result3b(1,2)];
+N4 = [Result4a(1,1) Result4b(1,1) Result4a(1,2) Result4b(1,2)];
 
 %% Ratios
 global Ratio1 Ratio2 Ratio3 Ratio4
@@ -257,7 +257,7 @@ Ratio4 = Result4a(1)/Result4b(1);
 % uiwait(handles.figure1);
 
 global Check
-Check = [0,0,0,0]
+Check = [0,0,0,0];
 
 
 % --- Outputs from this function are returned to the command line.
@@ -269,9 +269,6 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
-
-
 
 
 % --- Executes on button press in pushbutton2.
@@ -307,7 +304,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
-text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s',num2str(N1(1)),num2str(N1(2)),num2str(N1(3)),num2str(N1(4)))
+text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N1(1)),num2str(N1(2)),num2str(N1(3)),num2str(N1(4)),Ratio1);
 
 set(handles.text5,'String', text);
 
@@ -324,7 +321,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
-text = strcat('NAA = ', num2str(N2(1)), ' NAN = ', num2str(N2(2)), ' NNA = ', num2str(N2(3)), ' NNN = ', num2str(N2(4)), ' Ratio = ', num2str(Ratio2));
+text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N2(1)),num2str(N2(2)),num2str(N2(3)),num2str(N2(4)),Ratio2);
 
 set(handles.text5,'String', text);
 
@@ -342,7 +339,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
-text = strcat('NAA = ', num2str(N3(1)), ' NAN = ', num2str(N3(2)), ' NNA = ', num2str(N3(3)), ' NNN = ', num2str(N3(4)), ' Ratio = ', num2str(Ratio3));
+text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N3(1)),num2str(N3(2)),num2str(N3(3)),num2str(N3(4)),Ratio3);
 
 set(handles.text5,'String', text);
 
@@ -360,7 +357,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end    
 
-text = strcat('NAA = ', num2str(N4(1)), ' NAN = ', num2str(N4(2)), ' NNA = ', num2str(N4(3)), ' NNN = ', num2str(N4(4)), ' Ratio = ', num2str(Ratio4));
+text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N4(1)),num2str(N4(2)),num2str(N4(3)),num2str(N4(4)),Ratio4);
 
 set(handles.text5,'String', text);
 
@@ -394,171 +391,179 @@ function predictionBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global active NonActive MeanA MeanN StdevA StdevN
+global active NonActive MeanA MeanN StdevA StdevN Ratio1 Ratio2 Ratio3 Ratio4
 
 set(handles.axes1,'Visible','on')
 
+Result1a = zeros(1,2);
+Result2a = zeros(1,2);
+Result3a = zeros(1,2);
+Result4a = zeros(1,2);
+
+Result1b = zeros(1,2);
+Result2b = zeros(1,2);
+Result3b = zeros(1,2);
+Result4b = zeros(1,2);
+
+tmpactive = active;
+tmpNonActive = NonActive;
+tmpMeanA = MeanA;
+tmpMeanN = MeanN;
+tmpStdevA = StdevA;
+tmpStdevN = StdevN;
+
+arr = [13,9,8,6,4]; 
+
+for int=1:5
+        tmpactive(:,arr(int)) = []; 
+        tmpNonActive(:,arr(int)) = [];
+        tmpMeanA(:,arr(int)) = [];
+        tmpMeanN(:,arr(int)) = [];
+        tmpStdevA(:,arr(int)) = [];
+        tmpStdevN(:,arr(int)) = [];
+end
+
 %% Active Set
-Result1a = zeros(16,2);
-Result2a = zeros(16,2);
-Result3a = zeros(16,2);
-Result4a = zeros(16,2);
 
-Result1b = zeros(16,2);
-Result2b = zeros(16,2);
-Result3b = zeros(16,2);
-Result4b = zeros(16,2);
-
-Ratio1 = zeros(16,1);
-Ratio2 = zeros(16,1);
-Ratio3 = zeros(16,1);
-Ratio4 = zeros(16,1);
-
-for int=1:16
-    tmpactive = active;
-    tmpNonActive = NonActive;
-    tmpMeanA = MeanA;
-    tmpMeanN = MeanN;
-    tmpStdevA = StdevA;
-    tmpStdevN = StdevN;
-    
-    tmpactive(:,int) = []; % Removes one column from each to see which column is a problem
-    tmpNonActive(:,int) = [];
-    tmpMeanA(:,int) = [];
-    tmpMeanN(:,int) = [];
-    tmpStdevA(:,int) = [];
-    tmpStdevN(:,int) = [];
-    
-    for i = 1:1347
-        EDA = sqrt(sum((tmpactive(i,:)-tmpMeanA(1,:)).^2));
-        EDN = sqrt(sum((tmpactive(i,:)-tmpMeanN(1,:)).^2));
-        if EDA <= EDN
-            Result1a(int,1) = Result1a(int,1) + 1;    % Active compounds.
-        else
-            Result1a(int,2) = Result1a(int,2) + 1;    % Non-Active compounds.
-        end
+for i = 1:1347
+    EDA = sqrt(sum((tmpactive(i,:)-tmpMeanA(1,:)).^2));
+    EDN = sqrt(sum((tmpactive(i,:)-tmpMeanN(1,:)).^2));
+    if EDA <= EDN
+            Result1a(1,1) = Result1a(1,1) + 1;    % Active compounds.
+    else
+            Result1a(1,2) = Result1a(1,2) + 1;    % Non-Active compounds.
     end
+end
 
-    for i = 1:1347
-        MDA = sqrt(sum(((tmpactive(i,:)-tmpMeanA(1,:))./tmpStdevA(1,:)).^2));
-        MDN = sqrt(sum(((tmpactive(i,:)-tmpMeanN(1,:))./tmpStdevN(1,:)).^2));
-        if MDA <= MDN
-            Result2a(int,1) = Result2a(int,1) + 1;    % Active compounds.
-        else
-            Result2a(int,2) = Result2a(int,2) + 1;    % Non-Active compounds.
-        end
+for i = 1:1347
+    MDA = sqrt(sum(((tmpactive(i,:)-tmpMeanA(1,:))./tmpStdevA(1,:)).^2));
+    MDN = sqrt(sum(((tmpactive(i,:)-tmpMeanN(1,:))./tmpStdevN(1,:)).^2));
+    if MDA <= MDN
+            Result2a(1,1) = Result2a(1,1) + 1;    % Active compounds.
+    else
+            Result2a(1,2) = Result2a(1,2) + 1;    % Non-Active compounds.
     end
+end
 
-    for i = 1:1347
-        Active3 = 0;
-        NonActive3 = 0;
-        for j = 1:15 
+for i = 1:1347
+    Active3 = 0;
+    NonActive3 = 0;
+    for j = 1:11 
             P3 = sqrt((tmpactive(i,j)-tmpMeanA(1,j))^2);
             Q3 = sqrt((tmpactive(i,j)-tmpMeanN(1,j))^2);
             if P3 <= Q3
-                Active3 = Active3 + 1;
+            Active3 = Active3 + 1;
             else
-                NonActive3 = NonActive3 + 1;
+            NonActive3 = NonActive3 + 1;
             end
-        end
-        if Active3 >= NonActive3
-            Result3a(int,1) = Result3a(int,1) + 1;    % Active compounds.
-        else
-            Result3a(int,2) = Result3a(int,2) + 1;    % Non-Active compounds.
-        end
     end
+    if Active3 >= NonActive3
+            Result3a(1,1) = Result3a(1,1) + 1;    % Active compounds.
+    else
+            Result3a(1,2) = Result3a(1,2) + 1;    % Non-Active compounds.
+    end
+end
 
-    for i = 1:1347
-        Active4 = 0;
-        NonActive4 = 0;
-        for j = 1:15 
+for i = 1:1347
+    Active4 = 0;
+    NonActive4 = 0;
+    for j = 1:11 
             P4 = sqrt(((tmpactive(i,j)-tmpMeanA(1,j))/tmpStdevA(1,j))^2);
             Q4 = sqrt(((tmpactive(i,j)-tmpMeanN(1,j))/tmpStdevN(1,j))^2);
             if P4 <= Q4
-                Active4 = Active4 + 1;
+            Active4 = Active4 + 1;
             else
-                NonActive4 = NonActive4 + 1;
+            NonActive4 = NonActive4 + 1;
             end
-        end
-        if Active4 >= NonActive4
-            Result4a(int,1) = Result4a(int,1) + 1;    % Active compounds.
-        else
-            Result4a(int,2) = Result4a(int,2) + 1;    % Non-Active compounds.
-        end
     end
-
-    %% Non-Active Set
-
-    for i = 1:42000
-        EDA = sqrt(sum((tmpNonActive(i,:)-tmpMeanA(1,:)).^2));
-        EDN = sqrt(sum((tmpNonActive(i,:)-tmpMeanN(1,:)).^2));
-        if EDA <= EDN
-            Result1b(int,1) = Result1b(int,1) + 1;    % Active compounds.
-        else
-            Result1b(int,2) = Result1b(int,2) + 1;    % Non-Active compounds.
-        end
+    if Active4 >= NonActive4
+            Result4a(1,1) = Result4a(1,1) + 1;    % Active compounds.
+    else
+            Result4a(1,2) = Result4a(1,2) + 1;    % Non-Active compounds.
     end
+end
 
-    for i = 1:42000
-        MDA = sqrt(sum(((tmpNonActive(i,:)-tmpMeanA(1,:))./tmpStdevA(1,:)).^2));
-        MDN = sqrt(sum(((tmpNonActive(i,:)-tmpMeanN(1,:))./tmpStdevN(1,:)).^2));
-        if MDA <= MDN
-            Result2b(int,1) = Result2b(int,1) + 1;    % Active compounds.
-        else
-            Result2b(int,2) = Result2b(int,2) + 1;    % Non-Active compounds.
-        end
+%% Non-Active Set
+
+for i = 1:42000
+    EDA = sqrt(sum((tmpNonActive(i,:)-tmpMeanA(1,:)).^2));
+    EDN = sqrt(sum((tmpNonActive(i,:)-tmpMeanN(1,:)).^2));
+    if EDA <= EDN
+            Result1b(1,1) = Result1b(1,1) + 1;    % Active compounds.
+    else
+            Result1b(1,2) = Result1b(1,2) + 1;    % Non-Active compounds.
     end
+end
 
-    for i = 1:42000
-        Active3 = 0;
-        NonActive3 = 0;
-        for j = 1:15 
+for i = 1:42000
+    MDA = sqrt(sum(((tmpNonActive(i,:)-tmpMeanA(1,:))./tmpStdevA(1,:)).^2));
+    MDN = sqrt(sum(((tmpNonActive(i,:)-tmpMeanN(1,:))./tmpStdevN(1,:)).^2));
+    if MDA <= MDN
+            Result2b(1,1) = Result2b(1,1) + 1;    % Active compounds.
+    else
+            Result2b(1,2) = Result2b(1,2) + 1;    % Non-Active compounds.
+    end
+end
+
+for i = 1:42000
+    Active3 = 0;
+    NonActive3 = 0;
+    for j = 1:11 
             P3 = sqrt((tmpNonActive(i,j)-tmpMeanA(1,j))^2);
             Q3 = sqrt((tmpNonActive(i,j)-tmpMeanN(1,j))^2);
             if P3 <= Q3
-                Active3 = Active3 + 1;
+            Active3 = Active3 + 1;
             else
-                NonActive3 = NonActive3 + 1;
+            NonActive3 = NonActive3 + 1;
             end
-        end
-        if Active3 >= NonActive3
-            Result3b(int,1) = Result3b(int,1) + 1;    % Active compounds.
-        else
-            Result3b(int,2) = Result3b(int,2) + 1;    % Non-Active compounds.
-        end
     end
+    if Active3 >= NonActive3
+            Result3b(1,1) = Result3b(1,1) + 1;    % Active compounds.
+    else
+            Result3b(1,2) = Result3b(1,2) + 1;    % Non-Active compounds.
+    end
+end
 
-    for i = 1:42000
-        Active4 = 0;
-        NonActive4 = 0;
-        for j = 1:15 
+for i = 1:42000
+    Active4 = 0;
+    NonActive4 = 0;
+    for j = 1:11 
             P4 = sqrt(((tmpNonActive(i,j)-tmpMeanA(1,j))/tmpStdevA(1,j))^2);
             Q4 = sqrt(((tmpNonActive(i,j)-tmpMeanN(1,j))/tmpStdevN(1,j))^2);
             if P4 <= Q4
-                Active4 = Active4 + 1;
+            Active4 = Active4 + 1;
             else
-                NonActive4 = NonActive4 + 1;
+            NonActive4 = NonActive4 + 1;
             end
-        end
-        if Active4 >= NonActive4
-            Result4b(int,1) = Result4b(int,1) + 1;    % Active compounds.
-        else
-            Result4b(int,2) = Result4b(int,2) + 1;    % Non-Active compounds.
-        end
     end
-    
-    %% Ratios
-    
-    Ratio1(int) = Result1a(int,1)/Result1b(int,1);
-    Ratio2(int) = Result2a(int,1)/Result2b(int,1);
-    Ratio3(int) = Result3a(int,1)/Result3b(int,1);
-    Ratio4(int) = Result4a(int,1)/Result4b(int,1);
-    % UIWAIT makes GUI wait for user response (see UIRESUME)
-    % uiwait(handles.figure1);
-    
+    if Active4 >= NonActive4
+            Result4b(1,1) = Result4b(1,1) + 1;    % Active compounds.
+    else
+            Result4b(1,2) = Result4b(1,2) + 1;    % Non-Active compounds.
+    end
 end
 
-Ratio1
-Ratio2
-Ratio3
-Ratio4
+%% Ratios
+
+Ratios(1) = Result1a(1,1)/Result1b(1,1);
+Ratios(2) = Result2a(1,1)/Result2b(1,1);
+Ratios(3) = Result3a(1,1)/Result3b(1,1);
+Ratios(4) = Result4a(1,1)/Result4b(1,1);
+
+FinalRatio = mean(Ratios);
+
+text = sprintf('Ratio = %.5f', FinalRatio);
+
+set(handles.text5,'String',text)
+
+Answer = [0 Ratio1 Ratio2 Ratio3 Ratio4 FinalRatio 0];
+
+
+x = 0:1:6;
+y = Answer;
+m = stem(x,y);
+title('Drug Discovery Graph')
+xlabel('Classifier')
+ylabel('Ratio = Naa/Nan')
+
+set(m);
