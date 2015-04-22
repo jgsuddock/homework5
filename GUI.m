@@ -556,14 +556,15 @@ text = sprintf('Ratio = %.5f', FinalRatio);
 
 set(handles.text5,'String',text)
 
-Answer = [0 Ratio1 Ratio2 Ratio3 Ratio4 FinalRatio 0];
+Answer = [Ratio1 Ratio2 Ratio3 Ratio4 FinalRatio];
 
 
-x = 0:1:6;
+x = 1:1:5;
 y = Answer;
 m = stem(x,y);
-title('Drug Discovery Graph')
-xlabel('Classifier')
-ylabel('Ratio = Naa/Nan')
+xlim([0 6]); 
+title('Drug Discovery Graph', 'Fontsize', 22)
+xlabel('Classifier', 'Fontsize', 14)
+ylabel('Ratio = Naa/Nan', 'Fontsize', 14)
 
 set(m);
