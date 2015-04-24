@@ -43,6 +43,7 @@ else
 end
 % End initialization code - DO NOT EDIT
 
+%%% This is the data processing layer. It reads in the array from the Data layer and does all the necessary calculations to obtain the final ratio.%%%
 
 % --- Executes just before GUI is made visible.
 function GUI_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -85,6 +86,7 @@ fclose(str);
 %% Converts cell array to 2D matrix
 mat = cell2mat(e);
 
+%% Reading in the mean for active and non-active components
 MeanA = zeros(1,16);
 for i = 1:2
     for j = 1:8
@@ -99,6 +101,7 @@ for i = 1:2
     end
 end
 
+%% Reading in the standard deviation for active and non-active components
 StdevA = zeros(1,16);
 for i = 1:2
     for j = 1:8
@@ -119,6 +122,7 @@ Result2a = zeros(1,2);
 Result3a = zeros(1,2);
 Result4a = zeros(1,2);
 
+%% Classifier 1: Euclidean Distance
 for i = 1:1347
     EDA = sqrt(sum((active(i,:)-MeanA(1,:)).^2));
     EDN = sqrt(sum((active(i,:)-MeanN(1,:)).^2));
@@ -129,6 +133,7 @@ for i = 1:1347
     end
 end
 
+%% Classifier 2: Mahalanobis Distance
 for i = 1:1347
     MDA = sqrt(sum(((active(i,:)-MeanA(1,:))./StdevA(1,:)).^2));
     MDN = sqrt(sum(((active(i,:)-MeanN(1,:))./StdevN(1,:)).^2));
@@ -139,6 +144,7 @@ for i = 1:1347
     end
 end
 
+%% Classifier 3: Voting method using Euclidean Distance
 for i = 1:1347
     Active3 = 0;
     NonActive3 = 0;
@@ -158,6 +164,7 @@ for i = 1:1347
     end
 end
 
+%% Classifier 4: Voting method using Mahalanobis Distance
 for i = 1:1347
     Active4 = 0;
     NonActive4 = 0;
@@ -183,6 +190,7 @@ Result2b = zeros(1,2);
 Result3b = zeros(1,2);
 Result4b = zeros(1,2);
 
+%% Classifier 1: Euclidean Distance
 for i = 1:42000
     EDA = sqrt(sum((NonActive(i,:)-MeanA(1,:)).^2));
     EDN = sqrt(sum((NonActive(i,:)-MeanN(1,:)).^2));
@@ -193,6 +201,7 @@ for i = 1:42000
     end
 end
 
+%% Classifier 2: Mahalanobis Distance
 for i = 1:42000
     MDA = sqrt(sum(((NonActive(i,:)-MeanA(1,:))./StdevA(1,:)).^2));
     MDN = sqrt(sum(((NonActive(i,:)-MeanN(1,:))./StdevN(1,:)).^2));
@@ -203,6 +212,7 @@ for i = 1:42000
     end
 end
 
+%% Classifier 3: Voting method using Euclidean Distance
 for i = 1:42000
     Active3 = 0;
     NonActive3 = 0;
@@ -222,6 +232,7 @@ for i = 1:42000
     end
 end
 
+%% Classifier 4: Voting method using Mahalanobis Distance
 for i = 1:42000
     Active4 = 0;
     NonActive4 = 0;
@@ -241,6 +252,7 @@ for i = 1:42000
     end
 end
 
+%% Store results of each classifier into an array
 global N1 N2 N3 N4
 N1 = [Result1a(1,1) Result1b(1,1) Result1a(1,2) Result1b(1,2)];
 N2 = [Result2a(1,1) Result2b(1,1) Result2a(1,2) Result2b(1,2)];
@@ -256,6 +268,7 @@ Ratio4 = Result4a(1)/Result4b(1);
 % UIWAIT makes GUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
+%% Variable to only display final classifier after checking all the other buttons are pressed
 global Check
 Check = [0,0,0,0];
 
@@ -292,6 +305,8 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % --- Executes on button press in classifier1btn.
 
+%%% This is the GUI Layer. This layer appears as buttons for users to interact with. This layer does not interact with the Data Layer.
+
 function classifier1btn_Callback(hObject, eventdata, handles)
 % hObject    handle to classifier1btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -304,6 +319,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
+%% Print the ratio
 text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N1(1)),num2str(N1(2)),num2str(N1(3)),num2str(N1(4)),Ratio1);
 
 set(handles.text5,'String', text);
@@ -321,6 +337,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
+%% Print the ratio
 text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N2(1)),num2str(N2(2)),num2str(N2(3)),num2str(N2(4)),Ratio2);
 
 set(handles.text5,'String', text);
@@ -339,6 +356,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end
 
+%% Print the ratio
 text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N3(1)),num2str(N3(2)),num2str(N3(3)),num2str(N3(4)),Ratio3);
 
 set(handles.text5,'String', text);
@@ -357,6 +375,7 @@ if(Check == [1,1,1,1])
     set(handles.predictionBtn,'Visible','on')
 end    
 
+%% Print the ratio
 text = sprintf('Naa = %s\nNan = %s\nNna = %s\nNnn = %s\nRatio = %.5f',num2str(N4(1)),num2str(N4(2)),num2str(N4(3)),num2str(N4(4)),Ratio4);
 
 set(handles.text5,'String', text);
@@ -384,6 +403,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+%% Classifier 5: Prediction
 
 % --- Executes on button press in predictionBtn.
 function predictionBtn_Callback(hObject, eventdata, handles)
@@ -412,8 +432,10 @@ tmpMeanN = MeanN;
 tmpStdevA = StdevA;
 tmpStdevN = StdevN;
 
+%% Array to store the column to be removed so that the final ratio of each classifier is increased
 arr = [13,9,8,6,4]; 
 
+%% Removing the values in the column
 for int=1:5
         tmpactive(:,arr(int)) = []; 
         tmpNonActive(:,arr(int)) = [];
@@ -550,15 +572,17 @@ Ratios(2) = Result2a(1,1)/Result2b(1,1);
 Ratios(3) = Result3a(1,1)/Result3b(1,1);
 Ratios(4) = Result4a(1,1)/Result4b(1,1);
 
+%% Final ratio obtained by calculating the mean of the ratios after running through each classifier
 FinalRatio = mean(Ratios);
 
 text = sprintf('Ratio = %.5f', FinalRatio);
 
 set(handles.text5,'String',text)
 
+%% Store the ratios in an array
 Answer = [Ratio1 Ratio2 Ratio3 Ratio4 FinalRatio];
 
-
+%% Stem plot of the final answer
 x = 1:1:5;
 y = Answer;
 m = stem(x,y);
